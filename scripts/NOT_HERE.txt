@@ -1,0 +1,4 @@
+The items normally in ~/scripts/ are each their own git repo:
+	- https://github.com/Try431/bandcamp_scraper
+	- https://github.com/Try431/scripts
+	- https://github.com/Try431/Expose
