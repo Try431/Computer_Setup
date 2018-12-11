@@ -1,0 +1,111 @@
+Package/Program List
+---------------------
+	compton & compiz for terminal transparency and fading effects
+	ranger 
+		- rifle.conf goes in /usr/lib/python2.7/dist-packages/ranger/config
+		- rc.conf goes in ~/.config/ranger
+	redshift-gtk
+	dropbox
+	sublime-text
+	shutter
+	wicd-curses (If you find that can't select wireless network from login splash screen, go into network manager GUI and allow all users to connect)
+	mpv
+	feh
+	git (see Git Setup)
+	pavucontrol
+	galculator
+	python3.x
+	pip and pip3
+	snap
+		- https://askubuntu.com/questions/618471/why-is-ubuntu-moving-to-snappy-packages
+		- https://itsfoss.com/use-snap-packages-ubuntu-16-04/
+	spotify (via snap)
+	libreoffice
+	scrot (for lock.sh)
+
+
+
+
+General
+-------
+- default terminal gray text color is: #F4E9E9
+- add the secondary drive to fstab (https://help.ubuntu.com/community/Fstab)
+	- Example: `UUID=AKSJDKAJSHDLJJLSKD /media/isaac/Data ntfs auto 0 2`
+- make sure all scripts moved over are executable
+- remove desktop window from nautlius with "gsettings set org.gnome.desktop.background show-desktop-icons false" (not necessary with 18.04 LTS)
+- create ~/rangerdir file and add following alias to ~/.bashrc: `alias ranger='ranger --choosedir=$HOME/rangerdir;cd $(cat $HOME/rangerdir)'`
+- be sure to place dmenu_cache in /usr/local/bin (and make executable!)
+- make sure any scripts are placed in $PATH, or added to $PATH in `~/.profile`
+- if volume isn't changing with i3 hotkeys, in/decrement the sink number in i3's config
+- backgrounds are at http://positrondream.com/wallpapers
+
+Git Setup
+---------
+- http://web.mit.edu/6.005/www/fa16/getting-started/#config-git
+	`git config --global user.name "Isaac Garza"`
+	`git config --global user.email garzai@alum.mit.edu`
+	`git config --global core.editor nano`
+	`git config --global color.branch auto`
+	`git config --global color.diff auto`
+	`git config --global color.interactive auto`
+	`git config --global color.status auto`
+	`git config --global color.grep auto`
+	`git config --global alias.lol "log --graph --oneline --decorate --color --all"`
+
+
+Fonts
+-----
+- `sudo apt install fonts-font-awesome` will get most icons, but you will need to go to fontawesome.com and download the newest package. 
+- save new .otf files at /usr/share/fonts/opentype/font-awesome/
+- save new .eot, .svg, .ttf, .woff, .woof2 files in /usr/share/fonts-font-awesome/fonts
+- reload font cache with `sudo fc-cache -f -v`
+- if polybar icons aren't working, be sure the fonts listed in the polybar config include the following:
+	font-n = "Font Awesome 5 Free:style=Regular:pixelsize=10;1"
+	font-n+1 = "Font Awesome 5 Free:style=Solid:pixelsize=10;1"
+	font-n+2 = "Font Awesome 5 Brands:pixelsize=10;1"
+
+
+Polybar
+-------
+- `wireless-tools` MUST BE INSTALLED before compiling polybar!
+- https://github.com/jaagr/polybar
+- To get `libxcb-xrm-dev`, you need to add the ppa for it:
+	sudo add-apt-repository ppa:aguignard/ppa
+	sudo apt-get update
+	sudo apt-get install xcb-util-xrm
+- Config file is in polybar directory, as is launch.sh (don't forget this, and make it executable!)
+- To DEBUG issues, run `polybar example` after setting up, and take a look at the different error messages
+- If brightness section isn't showing, make sure config reflects `/sys/class/backlight/...`
+- If wifi section isn't showing, be sure to match the interface name using `ifconfig`
+- If battery section isn't showing, try in/decrementing the BATX number
+- Be sure to change filesystem2's mount point
+- Change icon size with `tray-maxsize = n` in [bar/example] section
+
+
+Cava
+----
+- https://github.com/karlstav/cava
+- Be sure to install automake, libtool, and git before proceeding
+- Config file is in cava directory
+
+
+i3-gaps
+-------
+- https://github.com/Airblader/i3/wiki/Compiling-&-Installing
+
+
+Brightness Up/Down
+------------------
+- files to change brightness are in `/sys/class/...`
+- acpi scripts should be stored in `/etc/acpi/...`
+- https://unix.stackexchange.com/questions/322814/xf86monbrightnessup-xf86monbrightnessdown-special-keys-not-working/427572#427572
+
+
+Keyboard Backlight Up/Down
+--------------------------
+- Create scripts similar to the ones for Brightness Up/Down, or
+- If you want to bind the script to a non-ACPI key via bindsym, you can create scripts in `/usr/local/bin`. To run them via sudo without requiring a password, edit /etc/sudoers.tmp with `sudo visudo`, and add the following right above the "#includedir..." line:
+	`isaac ALL=(root) NOPASSWD: /usr/local/bin/keyboard_up, /usr/local/bin/keyboard_down`
+- then just bind the key like:
+	`exec sudo /usr/...`
+- https://askubuntu.com/questions/821919/how-do-i-add-sudo-commands-to-a-keyboard-shortcut/821923#821923

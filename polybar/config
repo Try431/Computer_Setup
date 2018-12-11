@@ -1,0 +1,358 @@
+;=====================================================
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/jaagr/polybar
+;
+;   The README contains alot of information
+;
+;=====================================================
+
+[global/wm]
+margin-top = 100
+margin-bottom = 100
+
+[colors]
+fg = ${xrdb:color7}
+modfg = ${xrdb:color1}
+bg = ${xrdb:color0}
+
+white = #d1d1d1
+gray = #585858
+black = #ce1d1d1d
+red = #c795ae
+blue = #95aec7
+yellow = #c7ae95
+green = #aec795
+
+
+[bar/primary]
+width = 100%
+height = 41
+top = true
+;margin-top = 100
+
+border-top-size = 1  # creating top border space
+offset-y = -3   # aligning tray icons with rest of bar
+monitor = ${env:MONITOR:}
+
+;background = #141021
+background = #000f0f0f # This is the hexcode for transparency (also used in powermenu)
+;foreground = #c4b7c5 # This is light gray color
+# This is dark blue/black color below
+foreground = #382d39
+
+
+fixed-center = false
+
+font-0 = FontAwesome:pixelsize=10;0
+font-1 = PragmataPro Nerd Font:pixelsize=10;0
+font-2 = "Font Awesome 5 Free:style=Regular:pixelsize=10;1"
+font-3 = "Font Awesome 5 Free:style=Solid:pixelsize=10;1"
+font-4 = "Font Awesome 5 Brands:pixelsize=10;1"
+
+modules-left = i3
+modules-center = date
+modules-right = wired-network wireless-network cpu memory filesystem filesystem2 temperature pulseaudio backlight battery powermenu
+
+tray-position = right
+;tray-maxsize = 41
+tray-background = #000f0f0f
+tray-foreground= #000f0f0f
+
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+
+
+overline-size = 2
+overline-color = ${colors.white}
+underline-size = 4
+underline-color = ${colors.white}
+
+;override-redirect = true
+;wm-restack = i3
+
+
+[module/i3]
+type = internal/i3
+
+pin-workspaces = true
+strip-wsnumbers = true
+index-sort = true
+enable-scroll = false
+
+format = <label-state> 
+format-padding-right = 2
+
+
+;label-unfocused-foreground = #8a7f8f
+;label-unfocused-foreground = #c4b7c5
+label-unfocused-foreground = #382d39
+label-unfocused-padding = 1
+
+;label-focused-foreground = #c16772
+# This is light-blue/cyan color below
+label-focused-foreground = #00ffff 
+label-focused-padding = 1
+
+label-urgent-foreground = #e4b226
+label-urgent-padding = 1
+
+
+[module/filesystem]
+type = internal/fs
+
+; Mountpoints to display
+mount-0 = /
+
+label-mounted =  %free%
+format-mounted-padding = 2
+; label-mounted-underline = $(colors.white)
+
+; Seconds to sleep between updates
+; Default: 30
+; interval = 10
+
+; Display fixed precision values
+; Default: false
+fixed-values = true
+
+; Spacing between entries
+; Default: 2
+spacing = 6
+
+
+
+
+[module/filesystem2]
+type = internal/fs
+
+; Mountpoints to display
+mount-0 = /media/isaac/Data
+
+label-mounted =  %free%
+format-mounted-padding = 2
+; label-mounted-underline = $(colors.white)
+
+; Seconds to sleep between updates
+; Default: 30
+; interval = 10
+
+; Display fixed precision values
+; Default: false
+fixed-values = true
+
+; Spacing between entries
+; Default: 2
+spacing = 6
+
+
+
+
+
+[module/cpu]
+type = internal/cpu
+
+interval = 1
+
+format = <label>
+format-padding = 2
+
+label =  %percentage%%
+
+
+[module/memory]
+type = internal/memory
+
+interval = 1
+
+format = <label>
+format-padding = 2
+
+label =  %gb_used% (%percentage_used%%)
+
+
+[module/temperature]
+type = internal/temperature
+
+interval = 1
+
+thermal-zone = 0
+
+warn-temperature = 74
+
+format = <ramp> <label>
+format-padding = 2
+
+format-warn = <ramp> <label-warn>
+format-warn-padding = 2
+
+label = %temperature-c%
+
+label-warn = %temperature-c%
+label-warn-foreground = #e4b226
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-3 = 
+ramp-4 = 
+
+
+[module/date]
+type = internal/date
+
+interval = 1
+
+date = %a %b %d, 
+time = %H:%M:%S
+
+date-alt = %A, %d %B %Y
+time-alt = %H:%M:%S
+
+format = <label>
+format-padding = 2
+
+label =  %date% %time%
+
+
+[module/battery]
+; Note - if battery isn't showing, try BAT0 or BAT1, etc.
+type = internal/battery
+
+full-at = 95
+
+battery = BAT1
+adapter = ACAD
+
+poll-interval = 5
+
+format-charging = <animation-charging> <label-charging>
+format-charging-padding = 2
+
+format-discharging = <ramp-capacity> <label-discharging>
+format-discharging-padding = 2
+
+format-full = <ramp-capacity> <label-full>
+format-full-padding = 2
+
+label-charging = %percentage%%
+
+label-discharging = %percentage%%
+
+label-full = %percentage%%
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-framerate = 500
+
+
+[module/backlight]
+type = internal/backlight
+
+card = intel_backlight
+
+format = <label>
+format-padding = 2
+
+label =  %percentage%%
+
+
+[module/pulseaudio]
+type = internal/pulseaudio
+; List sinks via `pactl list sinks` and look at the Name field
+
+sink = alsa_output.pci-0000_00_1f.3.analog-stereo
+;interval = 1
+
+format-volume-padding = 2
+format-volume = <ramp-volume> <label-volume>
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+
+format-muted-padding = 2
+label-muted =  0%
+
+
+[module/powermenu]
+type = custom/menu
+
+label-open =   
+
+label-close = cancel
+
+label-close-background = #000f0f0f
+label-close-foreground = #ffeefc
+label-open-padding-left = 4
+label-open-padding-right = 3
+label-close-padding = 3
+
+menu-0-0 = lock
+menu-0-0-exec = ~/scripts/lock.sh
+menu-0-0-background = #000f0f0f
+menu-0-0-foreground = #c05c47
+menu-0-0-padding-right = 3
+
+menu-0-1 = reboot
+menu-0-1-exec = menu-open-1
+menu-0-1-background = #000f0f0f
+menu-0-1-foreground = #c05c47
+menu-0-1-padding-right = 3
+
+menu-0-2 = power off
+menu-0-2-exec = menu-open-2
+menu-0-2-background = #000f0f0f
+menu-0-2-foreground = #c05c47
+menu-0-2-padding-right = 3
+
+menu-1-0 = reboot?  
+menu-1-0-exec = reboot
+menu-1-0-background = #000f0f0f
+menu-1-0-foreground = #e4b226
+menu-1-0-padding-right = 3
+
+menu-2-0 = power off?  
+menu-2-0-exec = poweroff
+menu-2-0-background = #000f0f0f
+menu-2-0-foreground = #e4b226
+menu-2-0-padding-right = 3
+
+
+[module/wired-network]
+type = internal/network
+interface = enp59s0
+
+format-connected = <label-connected>
+format-connected-padding = 2
+
+format-disconnected = <label-disconnected>
+format-disconnected-padding = 2
+
+label-connected =  %linkspeed%
+
+label-disconnected =  None
+
+[module/wireless-network]
+type = internal/network
+
+; Look at ifconfig for interface
+interface = wlo1
+
+format-connected = <label-connected>
+format-connected-padding = 2
+
+format-disconnected = <label-disconnected>
+format-disconnected-padding = 2
+
+label-connected =  %essid%
+
+label-disconnected =  None
