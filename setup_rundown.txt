@@ -6,38 +6,54 @@ Package/Program List
 		- rc.conf goes in ~/.config/ranger
 	redshift-gtk
 	dropbox
-	sublime-text
-	shutter
-	wicd-curses (If you find that can't select wireless network from login splash screen, go into network manager GUI and allow all users to connect)
-	mpv
-	feh
+	sublime-text (https://www.sublimetext.com/docs/3/linux_repositories.html#apt)
+		- Install MagicPython through Package Manager (ctrl+shift+p --> Package Control: Install Package --> MagicPython)
+		- If Package Control is not installed: https://packagecontrol.io/installation 
+	shutter (way better version of Snipping Tool)
+	wicd-curses (terminal-based network manager)
+		- If you find that you can't select wireless network from login splash screen, go into network manager GUI and allow all users to connect
+	mpv (audio/video player)
+	feh (I use for backgrounds)
 	git (see Git Setup)
-	pavucontrol
-	galculator
+	pavucontrol (audio management)
+	galculator (calculator)
 	python3.x
-	pip and pip3
+	pip and pip3 (python installers)
 	snap
 		- https://askubuntu.com/questions/618471/why-is-ubuntu-moving-to-snappy-packages
 		- https://itsfoss.com/use-snap-packages-ubuntu-16-04/
 	spotify (via snap)
 	libreoffice
 	scrot (for lock.sh)
+	curl (multipurpose tool for transferring data from or to a server, generally -- Google around and read articles/watch videos to learn more)
+	arandr (GUI version of xrandr, a tool used for display management)
+	openconnect (for vpn)
+	fluidsynth (for midi --> mp3 script)
+		- Download music library "GeneralUser_GS_v1.471.sf2" from http://schristiancollins.com/generaluser.php
+		- Save to /usr/share/sounds/general-user/GeneralUser_GS_v1.471.sf2
 
 
 
 
 General
 -------
-- default terminal gray text color is: #F4E9E9
 - add the secondary drive to fstab (https://help.ubuntu.com/community/Fstab)
 	- Example: `UUID=AKSJDKAJSHDLJJLSKD /media/isaac/Data ntfs auto 0 2`
 - make sure all scripts moved over are executable
+	-- can make something executable with `chmod +x`
 - remove desktop window from nautlius with "gsettings set org.gnome.desktop.background show-desktop-icons false" (not necessary with 18.04 LTS)
 - create ~/rangerdir file and add following alias to ~/.bashrc: `alias ranger='ranger --choosedir=$HOME/rangerdir;cd $(cat $HOME/rangerdir)'`
 - be sure to place dmenu_cache in /usr/local/bin (and make executable!)
 - make sure any scripts are placed in $PATH, or added to $PATH in `~/.profile`
-- if volume isn't changing with i3 hotkeys, in/decrement the sink number in i3's config
 - backgrounds are at http://positrondream.com/wallpapers
+- Set lid closing to do nothing: http://tipsonubuntu.com/2018/04/28/change-lid-close-action-ubuntu-18-04-lts/
+- edit /etc/crontab (as root) and throw in the transmission_vpn_drop script
+- Install displaylink drivers for displayport (https://www.displaylink.com/downloads/ubuntu)
+- Run `timedatectl set-local-rtc 1 --adjust-system-clock` to fix Windows 10 time always being wrong after Linux login (http://ubuntuhandbook.org/index.php/2016/05/time-differences-ubuntu-1604-windows-10/)
+- Uncheck "Turn on fast startup" in Windows 10 power options to stop "read-only filesystem" crap (https://askubuntu.com/questions/917695/read-only-partition-dual-boot-win10/917702#917702)
+* Mostly work-related below *
+- Do a fresh install of vscode (remove ~/.vscode and ~/.config/Code), but keep track of which extensions are currently installed
+- Do a fresh install of Go (https://www.quora.com/Whats-the-easiest-way-to-update-Go-programming-language-to-the-latest-version-in-Linux)
 
 Git Setup
 ---------
@@ -56,9 +72,15 @@ Git Setup
 Fonts
 -----
 - `sudo apt install fonts-font-awesome` will get most icons, but you will need to go to fontawesome.com and download the newest package. 
+-- AS OF 08/2019 --
+- save new .otf files at /usr/share/fonts/opentype/font-awesome/
+- reload font cache with `sudo fc-cache -f -v` or login/logout
+
+-- OLDER METHOD --
 - save new .otf files at /usr/share/fonts/opentype/font-awesome/
 - save new .eot, .svg, .ttf, .woff, .woof2 files in /usr/share/fonts-font-awesome/fonts
 - reload font cache with `sudo fc-cache -f -v`
+
 - if polybar icons aren't working, be sure the fonts listed in the polybar config include the following:
 	font-n = "Font Awesome 5 Free:style=Regular:pixelsize=10;1"
 	font-n+1 = "Font Awesome 5 Free:style=Solid:pixelsize=10;1"
@@ -68,18 +90,24 @@ Fonts
 Polybar
 -------
 - `wireless-tools` MUST BE INSTALLED before compiling polybar!
-- https://github.com/jaagr/polybar
+- https://github.com/polybar/polybar
+- Dependencies: https://github.com/polybar/polybar/wiki/Compiling
+** OUTDATED **
 - To get `libxcb-xrm-dev`, you need to add the ppa for it:
 	sudo add-apt-repository ppa:aguignard/ppa
 	sudo apt-get update
 	sudo apt-get install xcb-util-xrm
+** OUTDATED **
 - Config file is in polybar directory, as is launch.sh (don't forget this, and make it executable!)
-- To DEBUG issues, run `polybar example` after setting up, and take a look at the different error messages
+- To DEBUG issues, run `polybar <bar_name>` after setting up, and take a look at the different error messages
+	-- your bar_name is whatever is in your polybar config file in the format "[bar/bar_name]" -- by default, it will be "example" if you use the example config (https://github.com/polybar/polybar#configuration)
 - If brightness section isn't showing, make sure config reflects `/sys/class/backlight/...`
 - If wifi section isn't showing, be sure to match the interface name using `ifconfig`
-- If battery section isn't showing, try in/decrementing the BATX number
+	-- e.g., in the [module/wired-network] section of my Polybar config, interface = enp59s0 because that's what shows when I run `ifconfig`.
+	-- Generally, wireless interfaces start with "w" (e.g., wl01) and wired interfaces start with "e"
+- If battery section isn't showing, try in/decrementing the BATX number (e.g., battery = BAT0 might need to be battery = BAT1 or battery = BAT2)
 - Be sure to change filesystem2's mount point
-- Change icon size with `tray-maxsize = n` in [bar/example] section
+- Change icon size with `tray-maxsize = n` in [bar/bar_name] section
 
 
 Cava
@@ -96,6 +124,7 @@ i3-gaps
 
 Brightness Up/Down
 ------------------
+* Note this is only if your Fn+Up key combos, or whatever they happen to be on your computer, don't actually work *
 - files to change brightness are in `/sys/class/...`
 - acpi scripts should be stored in `/etc/acpi/...`
 - https://unix.stackexchange.com/questions/322814/xf86monbrightnessup-xf86monbrightnessdown-special-keys-not-working/427572#427572
@@ -103,6 +132,7 @@ Brightness Up/Down
 
 Keyboard Backlight Up/Down
 --------------------------
+* Same as above, I only had to do this with a laptop whose keyboard backlight keys just weren't working -- luckily, with my current computer, I didn't have to deal with this shit *
 - Create scripts similar to the ones for Brightness Up/Down, or
 - If you want to bind the script to a non-ACPI key via bindsym, you can create scripts in `/usr/local/bin`. To run them via sudo without requiring a password, edit /etc/sudoers.tmp with `sudo visudo`, and add the following right above the "#includedir..." line:
 	`isaac ALL=(root) NOPASSWD: /usr/local/bin/keyboard_up, /usr/local/bin/keyboard_down`
