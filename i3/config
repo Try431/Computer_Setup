@@ -68,10 +68,16 @@ bindsym $mod+h split h
 bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen
+bindsym $mod+f fullscreen; exec polybar-msg cmd toggle
+
+# manually toggle polybar showing or hiding
+bindsym $mod+t exec polybar-msg cmd toggle
+
+# emter fullscreen in Chrome, bypassing stupid new behavior to keep tabs/searchbar
+bindsym $mod+g split h; focus parent; fullscreen toggle; focus child
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+#bindsym $mod+s layout stacking
 # bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
@@ -93,9 +99,9 @@ bindsym $mod+2 workspace 2: 
 bindsym $mod+3 workspace 3: 
 bindsym $mod+4 workspace 4: 
 bindsym $mod+5 workspace 5: 
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
+bindsym $mod+6 workspace 6: 
+bindsym $mod+7 workspace 7: 
+bindsym $mod+8 workspace 8: 
 bindsym $mod+9 workspace 9: 
 bindsym $mod+0 workspace 10: 
 
@@ -105,9 +111,9 @@ bindsym $mod+Shift+2 move container to workspace 2: 
 bindsym $mod+Shift+3 move container to workspace 3: 
 bindsym $mod+Shift+4 move container to workspace 4: 
 bindsym $mod+Shift+5 move container to workspace 5: 
-bindsym $mod+Shift+6 move container to workspace 6
-bindsym $mod+Shift+7 move container to workspace 7
-bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+6 move container to workspace 6: 
+bindsym $mod+Shift+7 move container to workspace 7: 
+bindsym $mod+Shift+8 move container to workspace 8: 
 bindsym $mod+Shift+9 move container to workspace 9: 
 bindsym $mod+Shift+0 move container to workspace 10: 
 
@@ -148,14 +154,14 @@ mode "resize" {
 # finds out, if available)
 bar {
 #       status_command i3status
-#       position top
+       position top
         i3bar_command $HOME/.config/polybar/launch.sh
 }
 
 ##### Custom config #####
 
 # Variables
-set $background ~/Pictures/Backgrounds/Range.png
+set $background ~/Pictures/Backgrounds/Yesteryear.png
 set $audio_sink alsa_output.pci-0000_00_1f.3.analog-stereo
 
 # Pulse Audio controls
@@ -164,8 +170,24 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl -- set-sink-volume $audi
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl -- set-sink-volume $audio_sink -5% #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute $audio_sink toggle # mute sound
 
+# Switch pactl sink to HDMI
+bindsym $mod+p exec $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_01_00.1.hdmi-stereo && $HOME/scripts/random-scripts/random_cava.sh && i3-msg reload
+
+# Switch pactl sink to built-in analog
+bindsym $mod+o exec $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_00_1f.3.analog-stereo && $HOME/scripts/random-scripts/random_cava.sh && i3-msg reload
+
+# Switch pactl sink to bluetooth headphones
+bindsym $mod+b exec $HOME/scripts/random-scripts/pactl_change_sink.sh bluez_sink.58_E2_8F_EE_70_4B.a2dp_sink && $HOME/scripts/random-scripts/random_cava.sh && i3-msg reload
+
+
 # Refresh cava monitor source and randomize cava gradient
 bindsym $mod+r exec $HOME/scripts/random-scripts/random_cava.sh
+
+# Save current cava gradient pair to ~/.config/cava/saved_gradients.txt
+bindsym $mod+Shift+s exec $HOME/scripts/random-scripts/save_cava_gradient.sh
+
+# Load random pair of gradients from ~/.config/cava/saved_gradients.txt
+bindsym $mod+Shift+f exec $HOME/scripts/random-scripts/load_random_cava_favorite.sh
 
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
@@ -175,12 +197,14 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightne
 bindsym $mod+m exec xrandr --output HDMI-0 --auto --left-of eDP-1-1 $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_01_00.1.hdmi-stereo && $HOME/scripts/random-scripts/random_cava.sh
 
 # Disconnect external monitors
-bindsym $mod+Shift+m exec xrandr --output HDMI-0 --off --output DVI-I-3-2 --off --output DVI-I-2-1 --off && $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_00_1f.3.analog-stereo && $HOME/scripts/random-scripts/random_cava.sh
+bindsym $mod+Shift+m exec xrandr --output HDMI-0 --off --output DVI-I-3-2 --off --output DVI-I-2-1 --off --output DP-1-1 --off && $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_00_1f.3.analog-stereo && $HOME/scripts/random-scripts/random_cava.sh && feh --bg-scale $background
+
+bindsym $mod+y exec $HOME/.config/polybar/launch.sh
 
 # Connect HDMI above
-bindsym $mod+n exec /home/isaac/scripts/random-scripts/HDMI-above.sh && feh --bg-scale $background && $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_01_00.1.hdmi-stereo && $HOME/scripts/random-scripts/random_cava.sh
+bindsym $mod+n exec /home/isaac/scripts/random-scripts/AOC-HDMI-above.sh && feh --bg-scale $background && $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_01_00.1.hdmi-stereo && $HOME/scripts/random-scripts/random_cava.sh
 
-# Connect to displayport monitors
+# Connect to displayport monitors at work
 bindsym $mod+w exec /home/isaac/scripts/random-scripts/displayport.sh && $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_00_1f.3.analog-stereo && $HOME/scripts/random-scripts/random_cava.sh && feh --bg-scale $background
 
 # Move workspace between monitors (left and right)
@@ -203,27 +227,23 @@ bindsym $mod+period exec sudo /usr/local/bin/keyboard_up
 # Decrease keyboard backlight brightness
 bindsym $mod+comma exec sudo /usr/local/bin/keyboard_down
 
-# Switch pactl sink to HDMI
-bindsym $mod+p exec $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_01_00.1.hdmi-stereo && $HOME/scripts/random-scripts/random_cava.sh
-# Switch pactl sink to built-in analog
-bindsym $mod+o exec $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_00_1f.3.analog-stereo && $HOME/scripts/random-scripts/random_cava.sh
-# Switch pactl sink to bluetooth headphones
-bindsym $mod+b exec $HOME/scripts/random-scripts/pactl_change_sink.sh bluez_sink.58_E2_8F_EE_70_4B.a2dp_sink && $HOME/scripts/random-scripts/random_cava.sh
 
 # Startup commands
-
 # This sets 'tapping enabled' on the touchpad
 exec --no-startup-id xinput set-prop 'ETPS/2 Elantech Touchpad' 'libinput Tapping Enabled' 1
 exec --no-startup-id redshift-gtk -l 33.9:-118.4 -t 6000:3400 -g 1.0 -m randr -v
-exec --no-startup-id exec transmission-gtk
+exec --no-startup-id touchpad-indicator
+#exec --no-startup-id exec transmission-gtk
 exec /usr/bin/gnome-settings-daemon
-exec --no-startup-id compton --config ~/.config/compton/compton.conf
+exec --no-startup-id compton --config ~/.config/compton/combined.conf
 exec --no-startup-id feh --bg-scale $background  # background image
+#exec --no-startup-id sh -c '/home/isaac/.config/polybar/launch.sh'
 exec --no-startup-id sh -c 'sleep 1; i3-msg "workspace 10: "'
-exec --no-startup-id "sh -c 'sleep 2; exec gnome-terminal --working-directory=/home/isaac/Music -e ranger'"
+exec --no-startup-id "sh -c 'sleep 2; exec gnome-terminal --working-directory=/media/isaac/Data/Music -e ranger'"
 exec --no-startup-id sh -c 'sleep 3; i3-msg "splitv"'
-exec --no-startup-id "sh -c 'sleep 4; exec gnome-terminal -e cava'"
-exec --no-startup-id sh -c 'sleep 5; i3-msg "workspace 3: "'
+exec --no-startup-id sh -c 'sleep 4; exec gnome-terminal -e cava'
+exec --no-startup-id sh -c 'sleep 5; i3-msg "focus up"; i3-msg "splith"'
+exec --no-startup-id sh -c 'sleep 6; i3-msg "workspace 3: "'
 
 
 ### i3-gaps config ###
@@ -232,7 +252,11 @@ exec --no-startup-id sh -c 'sleep 5; i3-msg "workspace 3: "'
 for_window [class="^.*"] border pixel 1
 
 gaps inner 13
-smart_gaps on
+#smart_gaps on
+gaps top 25
+gaps left -12
+gaps right -12
+gaps bottom -12
 
 
 # Colors

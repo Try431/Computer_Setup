@@ -13,11 +13,11 @@ framerate = 60
 # new as of 0.6.0 autosens of low values (dynamic range)
 # 'overshoot' allows bars to overshoot (in % of terminal height) without initiating autosens. DEPRECATED as of 0.6.0
 autosens = 1
-overshoot = 5
+overshoot = 10
 
 # Manual sensitivity in %. Autosens must be turned off for this to take effect.
 # 200 means double height. Accepts only non-negative values.
-sensitivity = 2
+sensitivity = 80
 
 # The number of bars (0-200). 0 sets it to auto (fill up console).
 # Bars' width and space between bars in number of characters.
@@ -129,12 +129,12 @@ gradient = 1
 ;gradient_color_1 = '#dd3e54'
 ;gradient_color_2 = '#6be585'
 
-https://uigradients.com/#Shifty
+# https://uigradients.com/#Shifty
 ;gradient_color_1 = "#636363"
 ;gradient_color_2 = "#a2ab58"
 
-gradient_color_1 = "#04f627"
-gradient_color_2 = "#5fe4e6"
+gradient_color_1 = "#f264b7"
+gradient_color_2 = "#ad0886"
 
 transparency = 1
 border = 0
@@ -144,7 +144,7 @@ border = 0
 
 # Percentage value for integral smoothing. Takes values from 0 - 100.
 # Higher values means smoother, but less precise. 0 to disable.
-integral = 80
+integral = 60
 
 # Disables or enables the so-called "Monstercat smoothing" with or without "waves". Set to 0 to disable. 
 ; monstercat = 1
@@ -152,7 +152,7 @@ integral = 80
 
 # Set gravity percentage for "drop off". Higher values means bars will drop faster.
 # Accepts only non-negative values. 50 means half gravity, 200 means double. Set to 0 to disable "drop off".
-; gravity = 100
+; gravity = 50
 
 
 # In bar height, bars that would have been lower that this will not be drawn.

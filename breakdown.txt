@@ -1,0 +1,66 @@
+General Linux breakdown
+------------
+So I'm basically just gonna somewhat hodge-podge go through some stuff that took me a few years of tinkering around and breaking stuff to figure out, including some things that I wish I had known earlier. I've included my 'setup_rundown.txt' file, which I keep as basically a checklist of things I need to do/install to get my computer setup to what I like it to be. It's not 100% comprehensive, but I try to update it every time I have to do a reset. Some of what's in there is specific to my work and/or how I like my particular setup, so I'll try to mark those as such. I've also gone through and added more detail/little notes to things to add more context for you.
+
+So let's get crackin'.
+
+
+fstab
+-----
+Basically, fstab is a file which dictates which disks to mount where and with what permissions. By default, it always mounts your boot drive, because otherwise, well, yeah. The fstab file is at `/etc/fstab`, and you need to be root to edit. It says so in the file itself (which I wish more things did), but you can use `sudo blkid` to figure out what the universal unique identifier (UUID)is for the drive you want to mount. I've included my fstab in this so you can take a gander at my setup. 
+
+
+Listing and mounting drives
+---------------------------
+There are a decent number of tools you can use to list the disks/drives connected to your machine (mounted and/or non-mounted). You can find lists online if you look (https://www.binarytides.com/linux-command-check-disk-partitions/), but the ones I use more often are `lsblk` and `fdisk`. 
+
+When I want to mount a specific drive (say, a USB flash drive or an SD card), I generally would do `sudo fdisk -l` to list the drives, though since I've learned about `lsblk`, I use that as it's cleaner. Say your new USB flash drive is sdb. All disks are automatically connected to /dev/, so it'd be /dev/sdb and /dev/sdb1, assuming the flash drive only had one partition. If you wanted to mount that drive, you would do `sudo mount /dev/sdb1 /location/you/want/to/mount/`. For me, I have `mount_flash` aliased to `sudo mount /dev/sdc1 /media/isaac/Flashdrive`. 
+
+I have it aliased in that way because I noticed flash drives had been mounted on /dev/sdc1; however, if I had a particular flash drive or external HDD that I used regularly, and didn't want to have to deal with the /dev/ mount location being different (say, if I already had a flash drive plugged in), I can use the command I mentioned above (`sudo blkid`) to retrieve the UUID of that particular drive. `mount` has a UUID flag (https://unix.stackexchange.com/questions/349118/how-to-mount-by-uuid-without-using-etc-fstab), so you can alias for a specific disk.
+
+
+Using ranger
+------------
+You've seen me use `ranger`, the terminal-based file manager. I've included two ranger-related files: `rc.conf` and `rifle.conf`. Upon installation of ranger, both of these files are in `/usr/lib/python2.7/dist-packages/ranger/api` -- as explained in the top of `rc.conf`, you should create a copy of the file in `~/.config/ranger/`, as ranger will look there first for changes. `rifle.conf` on the other hand should stay in its initial location (note: this means you'll need to be root to edit the file). 
+
+In a nutshell, `rifle.conf` sets how ranger behaves when opening/executing files of different types. The blurb at the top of the file explains things pretty well, and you can move things around or add things. For example, in my `rifle.conf`, you'll see that `mpv` is at the top of the "Audio without X" section - I'm fairly certain that's not the default, but I like to use mpv for all of my audio/video consumption, so I moved that around to make that my default when running audio/video files from ranger. You'll also see the top row under "Misc" that uses the environment variable $EDITOR - I set $EDITOR to be `subl`, so ranger opens those types of files in Sublime by default. 
+
+*Note, if you don't know what mime types are, reading `rifle.conf` is gonna be a bit confusing, so read up: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+
+
+While it's unlikely that you'll be modifying `rifle.conf` very often (I've tweaked it maybe a handful of times over the years), `rc.conf` is something you'll be personalizing pretty frequently. This file controls all of the keyboard shortcuts, configuration settings, UI options, and pretty much anything else that manages how you interact with ranger itself. Modifying this file is pretty straightforward - if you've spent any amount of time playing around with the i3 config file, you should be pretty comfortable with this. It's mostly a collection of key mappings to commands. For example, I have a bunch of g* shortcuts that `cd` to different locations I hit regularly (like `gi` to cd to ~/.config/i3/ or `gm` to go to `/media/isaac/Data/Shows/`). 
+
+One thing that took me a decent bit of digging around and looking through the source to figure out how to change is the colorschemes. By default, you'll see that in `rc.conf` there are three colorschemes to choose from: default, jungle, and snow. In my `rc.conf` though, you'll see that I've selected one called "yesteryear". I mentioned this briefly to you, but because I like to have transparent terminals and backgrounds, sometimes the default colors used by ranger blend in too well with the background. So, in `/usr/lib/python2.7/dist-packages/ranger/colorschemes/`, I created a copy of `default.py`, and tweaked a few of the colors for certain filetypes to show up better when I have my background set to a certain image.
+
+One final thing: I aliased `ranger` to `ranger --choosedir=$HOME/rangerdir;cd "$(cat $HOME/rangerdir)"`. When ranger exits, it writes the last-visited directory to the file you specify with the --choosedir flag. Then, immediately you `cd` to the location you just wrote. Effectively this allows you to exit ranger and still be in the location you just were. This is incredibly useful, especially if you use ranger to navigate to certain locations to then run commands on those files. While you can use the `s` shortcut to invoke a shell in ranger, it's helpful to be able to exit ranger where you just were. *Note, this means you need to create a file called `rangerdir` in your $HOME directory. You can set this wherever you want, just make sure the alias reflects the location.
+
+
+dmenu_cache
+----------- 
+I've attached the dmenu_cache file. This can go in your `/usr/local/bin/` (be sure to make it executable w/ `chmod +x`), and set your dmenu hotkey to `dmenu_cache`: `bindsym $mod+d exec --no-startup-id dmenu_cache`. By default, i3 sets it to `i3-dmenu-desktop`, but the cache version is much better IMO. It may be a good learning exercise to look at the script to see what it's doing. Bash scripts can be a fun black hole.
+
+
+pactl
+-----
+I won't go into too much detail here, but you'll notice that in my i3 config file, under my "Pulse Audio controls", I'm refereing an $audio_sink variable. Earlier, I used to reference a sink number, but this could (seemingly arbitrary) change between sessions, so eventually I did some digging and realized I could leverage the specific audio sink names, using `pactl list sinks` to figure out what they're called.
+
+Below that, you'll also see that I have some keybindings that run a `pactl_change_sink.sh` and a `random_cava.sh` script. Feel free to look through the code - that was a fun and at time frustrating exercise - but the gist is that `pactl_change_sink.sh` changes the audio sink, so that if I connect to an external monitor, or my bluetooth headphones, I can hit that keybinding and make sound come out through whatever sink I want. You'll also see that I use the script when I connect and disconnect external monitors.
+
+*Note, `pavucontrol` is a GUI-version of managing your pulse audio setup.
+
+
+Cron jobs
+---------
+This is relatively straightforward - there are a ton of online sources, so I won't go into it too much. Basically, cron jobs are jobs that are run at set intervals based on a specific format. If there's something that you want to do on a regular basis (on the order of minutes, days, weeks, months, etc.), create a cron job. For example, I have a script that checks if I'm running `transmission-gtk`, which is my torrent client. If I am, and I'm not connected to a vpn, it automatically kills the program. I'll attach my crontab at `/etc/crontab` so you can see what it looks like. I'm running it every 10 seconds, because I want to minimize the amount of time I'm torrenting something w/o a vpn connection.
+
+
+Environment Variables
+---------------------
+Environment variables are effectively just variables that can be used by, well, anything* on your system. There's a wealth of info online about these, but in a nutshell;
+	- You can temporarily create an env variable via `export` in the terminal (e.g., `export BOB="hey"; echo $BOB)
+		-- if you close that terminal window and open a new one, running `echo $BOB` will yield an empty string
+	- You can create permanent env variables by saving them in your ~/.profile (e.g., `export BOB="hey"` in the file will make $BOB always yield "hey" anywhere on your system)
+		-- to actually enact changes made in your ~/.bashrc and ~/.profile, you need to source the files -- see this answer and read comments to understand more about it: https://askubuntu.com/a/17538/411064
+
+*There's a ton of writing out there about where is the proper place to keep your environment variables and other things that are/aren't related to bash (~/.profile, ~/.bashrc, ~/.bash_profile, etc.), as well as what subsystems can access what from where, so I'm not gonna go into that (also cause it confuses me too lol and it's not really important to me - if I were running a server or something that were accessed by not just me, it'd probably be a different story). One of a million questions about this: https://unix.stackexchange.com/questions/117467/how-to-permanently-set-environmental-variables
+

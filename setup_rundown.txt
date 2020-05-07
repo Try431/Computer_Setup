@@ -31,6 +31,7 @@ Package/Program List
 	fluidsynth (for midi --> mp3 script)
 		- Download music library "GeneralUser_GS_v1.471.sf2" from http://schristiancollins.com/generaluser.php
 		- Save to /usr/share/sounds/general-user/GeneralUser_GS_v1.471.sf2
+	exiv2 (for getting exif data from photos)
 
 
 
@@ -139,3 +140,10 @@ Keyboard Backlight Up/Down
 - then just bind the key like:
 	`exec sudo /usr/...`
 - https://askubuntu.com/questions/821919/how-do-i-add-sudo-commands-to-a-keyboard-shortcut/821923#821923
+
+** NOTE **
+Work-related nameservers:
+
+nameserver 147.22.116.240
+nameserver 147.22.117.9
+search la.frd.directv.com

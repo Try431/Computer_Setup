@@ -31,15 +31,18 @@ height = 41
 top = true
 ;margin-top = 100
 
+enable-ipc = true
+
 border-top-size = 1  # creating top border space
 offset-y = -3   # aligning tray icons with rest of bar
 monitor = ${env:MONITOR:}
 
 ;background = #141021
 background = #000f0f0f # This is the hexcode for transparency (also used in powermenu)
-;foreground = #c4b7c5 # This is light gray color
+# This is light gray color
+foreground = #c4b7c5 
 # This is dark blue/black color below
-foreground = #382d39
+;foreground = #382d39
 
 
 fixed-center = false
@@ -55,7 +58,8 @@ modules-center = date
 modules-right = wired-network wireless-network cpu memory filesystem filesystem2 temperature pulseaudio backlight battery powermenu
 
 tray-position = right
-;tray-maxsize = 41
+;tray-transparent = false # tray-transparent is deprecated, the tray always uses pseudo-transparency. Please remove it.
+;tray-maxsize = 41 
 tray-background = #000f0f0f
 tray-foreground= #000f0f0f
 
@@ -68,8 +72,8 @@ overline-color = ${colors.white}
 underline-size = 4
 underline-color = ${colors.white}
 
-;override-redirect = true
-;wm-restack = i3
+override-redirect = true
+wm-restack = i3
 
 
 [module/i3]
