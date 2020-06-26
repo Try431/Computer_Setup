@@ -1,0 +1,50 @@
+find .lo
+find kru
+rename MENU - Homage to Game Title Themes
+open_with unzip 
+shell unzip %s
+shell mkdir ads_triggers
+shell g
+find wic
+shell mkdir curses
+find mn
+find pr
+find mou
+find s
+shell 
+find bac
+find ho
+find wo
+find U
+open_with r
+find va
+find li
+find dp
+find Di
+rename pony.png
+open_with libreoffice
+find Sout
+find Ta
+rename FreeTaxUSA_2019_CA_Return.pdf
+rename FreeTaxUSA_2019_Fed_Return.pdf
+shell gs
+find ran
+find back
+find dep
+find com
+find ru
+find sy
+find res
+open_with vlc
+open_with shutter
+find Comp
+rename rc.conf
+delete
+rename rifle.conf
+open_with code 
+shell sudo subl mime.types
+find Mis
+find 
+find rang
+find us
+find lo

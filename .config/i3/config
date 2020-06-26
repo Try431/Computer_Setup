@@ -118,7 +118,7 @@ bindsym $mod+Shift+9 move container to workspace 9: 
 bindsym $mod+Shift+0 move container to workspace 10: 
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+# bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
@@ -162,7 +162,7 @@ bar {
 
 # Variables
 set $background ~/Pictures/Backgrounds/Yesteryear.png
-set $audio_sink alsa_output.pci-0000_00_1f.3.analog-stereo
+set $audio_sink alsa_output.pci-0000_01_00.1.hdmi-stereo
 
 # Pulse Audio controls
 ### If volume controls stop working, try incrementing or decrementing the sink number ###
@@ -201,6 +201,10 @@ bindsym $mod+Shift+m exec xrandr --output HDMI-0 --off --output DVI-I-3-2 --off 
 
 bindsym $mod+y exec $HOME/.config/polybar/launch.sh
 
+bindsym $mod+c exec compton --config $HOME/.config/compton/combined.conf
+
+bindsym $mod+Shift+c exec killall compton
+
 # Connect HDMI above
 bindsym $mod+n exec /home/isaac/scripts/random-scripts/AOC-HDMI-above.sh && feh --bg-scale $background && $HOME/scripts/random-scripts/pactl_change_sink.sh alsa_output.pci-0000_01_00.1.hdmi-stereo && $HOME/scripts/random-scripts/random_cava.sh
 
@@ -235,9 +239,9 @@ exec --no-startup-id redshift-gtk -l 33.9:-118.4 -t 6000:3400 -g 1.0 -m randr -v
 exec --no-startup-id touchpad-indicator
 #exec --no-startup-id exec transmission-gtk
 exec /usr/bin/gnome-settings-daemon
-exec --no-startup-id compton --config ~/.config/compton/combined.conf
 exec --no-startup-id feh --bg-scale $background  # background image
 #exec --no-startup-id sh -c '/home/isaac/.config/polybar/launch.sh'
+exec --no-startup-id compton --config ~/.config/compton/combined.conf -b
 exec --no-startup-id sh -c 'sleep 1; i3-msg "workspace 10: "'
 exec --no-startup-id "sh -c 'sleep 2; exec gnome-terminal --working-directory=/media/isaac/Data/Music -e ranger'"
 exec --no-startup-id sh -c 'sleep 3; i3-msg "splitv"'
@@ -250,6 +254,8 @@ exec --no-startup-id sh -c 'sleep 6; i3-msg "workspace 3: "'
 
 # Disabling windows for i3-gaps
 for_window [class="^.*"] border pixel 1
+
+# https://github.com/polybar/polybar/issues/1512#issuecomment-607563319
 
 gaps inner 13
 #smart_gaps on
