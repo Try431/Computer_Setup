@@ -1,0 +1,22 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# / was on /dev/nvme0n1p5 during installation
+UUID=93c60d78-00f8-4948-910b-bfb297f3e143 /               ext4    errors=remount-ro 0       1
+# /boot/efi was on /dev/nvme0n1p2 during installation
+UUID=4A22-E0E6  /boot/efi       vfat    umask=0077      0       1
+/swapfile                                 none            swap    sw              0       0
+
+UUID=DE24B92424B90117 /media/isaac/Data ntfs uid=1000,gid=1000,dmask=022,fmask=133 0 2
+
+UUID=3A4427EE4427AC17 /media/isaac/Windows_Partition ntfs-3g uid=1000,gif=1000,dmask=022,fmask=133 0 2
+
+UUID=32DC-CAD0 /media/isaac/Large_External exfat uid=1000,gid=1000,dmask=022,fmask=133 0 2
+
+# https://askubuntu.com/questions/113733/how-do-i-correctly-mount-a-ntfs-partition-in-etc-fstab for Data options
+
+# https://askubuntu.com/questions/11840/how-do-i-use-chmod-on-an-ntfs-or-fat32-partition

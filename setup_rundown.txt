@@ -34,6 +34,7 @@ Package/Program List
 	exiv2 (for getting exif data from photos)
 	highlight (for ranger syntax highlighting)
 	ccrypt
+	docker
 
 
 
@@ -57,7 +58,29 @@ General
 - Uncheck "Turn on fast startup" in Windows 10 power options to stop "read-only filesystem" crap (https://askubuntu.com/questions/917695/read-only-partition-dual-boot-win10/917702#917702)
 * Mostly work-related below *
 - Do a fresh install of vscode (remove ~/.vscode and ~/.config/Code), but keep track of which extensions are currently installed
-- Do a fresh install of Go (https://www.quora.com/Whats-the-easiest-way-to-update-Go-programming-language-to-the-latest-version-in-Linux)
+- Do a fresh install of Go (https://archive.is/dGHAd)
+
+Plex
+-----
+- Make sure Docker is installed, and below is the command used to spin up my Plex server (with the large external drive)
+- source: https://www.smarthomebeginner.com/install-plex-using-docker/
+
+`sudo docker create \
+--name=plex \
+--net=host \
+--restart=always \
+-e VERSION=latest \
+-e PUID=1001 -e PGID=1001 \
+-e TZ=America/Chicago \
+-v /home/docker/plex/config:/config \
+-v /media/isaac/Large_External/Seedbox/Shows:/data/seedbox_shows \
+-v /media/isaac/Large_External/Seedbox/Movies:/data/seedbox_movies \
+-v /media/isaac/Data/Shows:/data/shows \
+-v /media/isaac/Data/Movies:/data/movies \
+-v /media/isaac/Data/Music:/data/music \
+-v /home/docker/plex/transcode:/transcode \
+linuxserver/plex`
+
 
 Git Setup
 ---------
@@ -112,6 +135,7 @@ Polybar
 - If battery section isn't showing, try in/decrementing the BATX number (e.g., battery = BAT0 might need to be battery = BAT1 or battery = BAT2)
 - Be sure to change filesystem2's mount point
 - Change icon size with `tray-maxsize = n` in [bar/bar_name] section
+- This is documentation for how I got polybar to work well with i3-gaps and transparent windows: https://github.com/polybar/polybar/issues/980#issuecomment-607563455
 
 
 Cava
