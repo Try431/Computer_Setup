@@ -41,6 +41,8 @@ Package/Program List
 
 General
 -------
+- gray terminal font color is: #D3D7CF
+	- darker 'background' color is: #382d39
 - make sure /usr/share/xsessions/ has an `i3.desktop` file
 - add the secondary drive to fstab (https://help.ubuntu.com/community/Fstab)
 	- Example: `UUID=AKSJDKAJSHDLJJLSKD /media/isaac/Data ntfs auto 0 2`
